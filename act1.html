@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <title>Save audio data</title>
+  <script src="./echos.js"></script>
+</head>
+
+<body>
+  <h1> ブラウザで録音した音声のプレビューとダウンロードをします。 </h1>
+  <button id="start">録音開始</button>
+  <button id="stop">録音終了</button>
+  <ol id="results"></ol>
+
+  <br>
+  ref: <a href="https://qiita.com/optimisuke/items/f1434d4a46afd667adc6">ブラウザで録音してwavで保存 - Qiita</a>
+
+  <script>
+    !(async function () {
+      let echos;
+
+      // 録音開始
+      document
+        .getElementById('start')
+        .addEventListener('click', async (e) => {
+          echos = new Echos()
+          await echos.record()
+        })
+
+      // STOPボタンを押したらWavにエンコードしてダウンロードする。
+      document
+        .getElementById('stop')
+        .addEventListener('click', (_) => {
+          const url = echos.freeze()
+
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <audio controls src="${url}"></audio>
+            <a download="test.wav" href="${url}">ダウンロード</a>
+          `;
+
+          document.getElementById('results').appendChild(li);
+        });
+    })()
+
+  </script>
+</body>
+
+</html>
